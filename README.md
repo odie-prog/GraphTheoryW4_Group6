@@ -69,10 +69,10 @@ python3 dungeon_generator.py
 #### 1. Valid Input
 Enter a valid number of rooms and tunnels (example: 25 rooms, 30 tunnels).
 
-![[Pasted image 20260929134622.png]]
+![Valid Input Sample Run](Assets/Pasted%20image%2020260929134622.png)
 
 #### 2. Invalid Input
-![[Pasted image 20260929134751.png]]
+![Invalid Input Sample Run](Assets/Pasted%20image%2020260929134751.png)
 
 ### AI Involved:
  https://share.gemini.google/2FDc3OzTBYQb
