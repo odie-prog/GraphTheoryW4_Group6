@@ -115,10 +115,10 @@ The algorithm validates the layout and outputs the following directly to the ter
 
 ### Result of Sample Runs
 1. Using the same valid sample inputs as used in section A (25 rooms & 30 tunnels)
-![Valid Input Sample Run: Validation](<img width="1085" height="815" alt="image" src="https://github.com/user-attachments/assets/41a700f6-49a2-4ac5-ba2f-5d0c3f8bfa60" />)
+![Valid Input Sample Run - Validation](<img width="1085" height="815" alt="image" src="https://github.com/user-attachments/assets/41a700f6-49a2-4ac5-ba2f-5d0c3f8bfa60" />)
 
 2. Invalid sample input
-![Invalid Input Sample Run: Validation]()
+![Invalid Input Sample Run - Validation]()
 
 
 ### AI Involved:
