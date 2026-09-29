@@ -120,7 +120,6 @@ The algorithm validates the layout and outputs the following directly to the ter
 2. Invalid sample input
 - <img width="595" height="118" alt="image" src="https://github.com/user-attachments/assets/b75e4011-dbdc-4807-9e68-a32eaa3e0501" />
 
-
-
 ### AI Involved:
  https://share.gemini.google/2FDc3OzTBYQb
+ https://share.gemini.google/LuF6LnnylvfX
