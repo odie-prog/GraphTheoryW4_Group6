@@ -74,5 +74,52 @@ Enter a valid number of rooms and tunnels (example: 25 rooms, 30 tunnels).
 #### 2. Invalid Input
 ![Invalid Input Sample Run](Assets/Pasted%20image%2020260929134751.png)
 
+## B. Depth-First Search Dungeon Validator
+This algorithm validates whether a procedurally generated dungeon can be cleared by searching for valid paths that visit every room exactly once without revisiting any room (a Hamiltonian path).
+
+**This algorithm combines two specific Graph Theory and Search concepts:**
+
+1. **Adjacency List Graph Representation: Converts raw room coordinates and tunnel pairs into a fast-lookup graph structure.**
+2. **Depth-First Search (DFS) with Backtracking: A recursive search technique that systematically explores every possible branching route from room to room, undoing steps (backtracking) when hitting a dead end.**
+
+By attempting a path search starting from every room and capping the maximum results found, it efficiently checks dungeon solvability without causing a system freeze on complex layouts.
+
+### Code Explanation
+
+```python
+def validate_dungeon(dungeon, max_paths_to_find=100):
+    # Converts rooms and tunnels into an adjacency list graph,
+    # then runs a DFS search starting from every available room.
+    ...
+
+def dfs(current_room, current_path, visited):
+    # Explores connected rooms recursively:
+    # 1. Stops early if max_paths_to_find limit is reached.
+    # 2. Saves path if all rooms are visited (Hamiltonian Path found).
+    # 3. Recursively visits neighbors, then backtracks when stuck.
+    ...
+```
+
+1. Adjacency List Construction: Converts **`dungeon['rooms']`** and **`dungeon['tunnels']`** into a graph dictionary (**`adj`**) mapping each room to its adjacent neighbors for $O(1)$ lookup time during search iterations.
+2. **`dfs`** (Depth-First Search): Recursively explores adjacent rooms by appending unvisited nodes to **`current_path`** and tracking them in a **`visited`** set to enforce the rule of visiting each room exactly once.
+3. Backtracking Mechanism: When the DFS reaches a node with no unvisited neighbors, it removes (**`pop`** / **`remove`**) the current room from **`current_path`** and **`visited`**, unwinding the recursion stack to explore alternate branching routes.
+4. Path Validation & Capping: Checks if **`len(current_path) == total_rooms`**. When true, a complete Hamiltonian Path is identified and recorded. Search execution halts early once **`valid_paths`** reaches **`max_paths_to_find`** (default 100) to keep execution times bounded.
+5. Multi-Start Room Iteration: Loops through every room in **`dungeon['rooms']`** as a candidate starting node, ensuring valid routes are identified regardless of where the player begins in the dungeon.
+
+### Output Format
+The algorithm validates the layout and outputs the following directly to the terminal:
+- Dungeon Status: Confirms whether the layout is **`VALID`** or **`Invalid`**.
+- Route Counter: Reports the total count of valid clearing routes found (capped at **`100+`**).
+- Sample Solution Routes: Displays up to the first 3 viable pathways in sequence format (e.g., **`(0, 0) -> (1, 0) -> (1, 1)`**).
+- Error Handling: Catches non-integer inputs and rejects invalid parameters (e.g., fewer than $R - 1$ tunnels or fewer than 2 rooms).
+
+### Result of Sample Runs
+1. Using the same valid sample inputs as used in section A (25 rooms & 30 tunnels)
+![Valid Input Sample Run: Validation]()
+
+2. Invalid sample input
+![Invalid Input Sample Run: Validation]()
+
+
 ### AI Involved:
  https://share.gemini.google/2FDc3OzTBYQb
