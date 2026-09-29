@@ -154,7 +154,55 @@ def generate_dungeon(num_rooms, num_tunnels, shuffle_iterations=200):
         "tunnels": [tuple(edge) for edge in edges]
     }
 
+# Start of validation algorithm
+def validate_dungeon(dungeon, max_paths_to_find=100):
+    """
+    Validates if the dungeon can be cleared according to the rules.
+    Finds Hamiltonian Paths (visiting every room exactly once).
+    """
+    rooms = dungeon['rooms']
+    tunnels = dungeon['tunnels']
+    
+    # Builds an adjacency list (graph representation)
+    adj = {room: [] for room in rooms}
+    for u, v in tunnels:
+        if u in adj and v in adj:
+            adj[u].append(v)
+            adj[v].append(u)
+            
+    valid_paths = []
+    total_rooms = len(rooms)
+    
+    # Depth-First Search with backtracking to explore routes
+    def dfs(current_room, current_path, visited):
+        # Stop searching if we've already found enough paths (prevents freezing on large dungeons)
+        if len(valid_paths) >= max_paths_to_find:
+            return
 
+        # If the path length equals total rooms, we've visited every room exactly once
+        if len(current_path) == total_rooms:
+            valid_paths.append(list(current_path))
+            return
+            
+        # Explore connected neighboring rooms
+        for neighbor in adj[current_room]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                current_path.append(neighbor)
+                
+                dfs(neighbor, current_path, visited)
+                
+                # Backtrack: remove the room to try other possible routes
+                current_path.pop()
+                visited.remove(neighbor)
+
+    # Try starting the path from every single room in the dungeon
+    for start_room in rooms:
+        dfs(start_room, [start_room], {start_room})
+        if len(valid_paths) >= max_paths_to_find:
+            break
+            
+    return valid_paths
 
 if __name__ == "__main__":
     print("--- Procedural Dungeon Generator ---")
@@ -167,6 +215,7 @@ if __name__ == "__main__":
         elif t < r - 1:
             print("Error: You must request at least R-1 tunnels to generate a connected dungeon.")
         else:
+            # Dungeon generation algorithm
             dungeon = generate_dungeon(r, t, shuffle_iterations=200)
             
             print(f"\nGenerated Dungeon successfully!")
@@ -182,6 +231,27 @@ if __name__ == "__main__":
             for i in range(0, len(dungeon['tunnels']), 3):
                 print("  " + ", ".join(map(str, dungeon['tunnels'][i:i+3])))
             print()
+
+            # Dungeon validation algorithm
+            print("--- Validating Dungeon Pathing ---")
+            print("Calculating valid routes... (This might take a moment on large grids)")
+            
+            paths = validate_dungeon(dungeon)
+            
+            if not paths:
+                print("No valid path exists. (Invalid Dungeon: Impossible to clear all rooms once)")
+            else:
+                capped = len(paths) >= 100
+                print(f"Dungeon is VALID! Found {'100+' if capped else len(paths)} possible clearing path(s).")
+                
+                # Print up to the first 3 paths so we don't spam the terminal
+                display_limit = min(3, len(paths))
+                for i in range(display_limit):
+                    route_str = " -> ".join(map(str, paths[i]))
+                    print(f"  Path {i+1}: {route_str}")
+                
+                if len(paths) > display_limit:
+                    print(f"  ... and {len(paths) - display_limit} more path(s) hidden.")
             
     except ValueError:
         print("Error: Please enter valid integer numbers. (Invalid input)")
